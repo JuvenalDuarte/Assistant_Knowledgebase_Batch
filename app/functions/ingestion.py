@@ -7,12 +7,18 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-def fetchFromCarol(org, env, conn, stag, columns=None):
-    carol = Carol()
-    carol.switch_environment(org_name=org, env_name=env, app_name='zendeskdata')
+def fetchFromCarol(conn, stag, org=None, env=None, columns=None, app = None):
+
+    login = Carol()
+
+    if not org: org = login.organization
+    if not env: env = login.environment
+    if not app: app = login.app_name
+
+    login.switch_environment(org_name=org, env_name=env, app_name=app)
 
     try:
-        df = Staging(carol).fetch_parquet(staging_name=stag, connector_name=conn, backend='pandas', columns=columns, cds=True)
+        df = Staging(login).fetch_parquet(staging_name=stag, connector_name=conn, backend='pandas', columns=columns, cds=True)
 
     except Exception as e:
         logger.error(f'Failed to fetch dada. {e}')
@@ -30,11 +36,11 @@ def data_ingestion(stag):
         org, env, conn, stag = stag_list
     elif len(stag_list) == 3:
         env, conn, stag = stag_list
-        org = "totvs"
+        org = None
     elif len(stag_list) == 2:
         conn, stag = stag_list
-        org = "totvs"
-        env = "sentencesimilarity"
+        org = None
+        env = None
     else:
         raise "Unable to parse \"in_staging\" setting. Valid options are: 1. org/env/conn/stag; 2. env/conn/stag; 3. conn/stag."
 
