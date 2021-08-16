@@ -9,6 +9,7 @@ import gc
 import re
 import ftfy
 from unidecode import unidecode
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -38,17 +39,24 @@ def transformSentences(m, custom_stopwords, preproc_mode):
     else:
         return mproc2
 
-def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, preproc, cache=True, specificity_percent=0.3):
+def update_embeddings(df, cols_search, cols_keywords, kb_fields, app_name, url, model, preproc, cache=True, specificity_percent=0.3):
 
     # Filling NAs with blank
     logger.info('Replacing NaN with \"\" to avoid crashes on fulfillment.')
     df.fillna('', inplace=True)
+    
+    kb_fields_d = json.loads(kb_fields)
 
-    try:
-        cols_search_l = [c.lstrip().rstrip() for c in cols_search.split(",")]
-    except Exception as e:
-        logger.error(f'Unable to parse setting kb_search_fields:{cols_search}.')
-        raise f"Stack: {e}"
+    cols_id = kb_fields_d["id"]
+    if type(cols_id) is list:
+        for c in cols_id:
+            df[c]=df[c].astype(str)
+        df['id'] = df[cols_id].agg('-'.join, axis=1)
+    else: 
+        df["id"] = df[cols_id]
+
+    cols_search_l = kb_fields_d["search"]
+    if type(cols_search_l) is not list: cols_search_l = [cols_search_l]
 
     dfs = []
     for cs in cols_search_l:
@@ -65,14 +73,8 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, prep
         # Adding to the list of "searcheable" data 
         dfs.append(dft)
 
-    try:
-        if cols_keywords:
-            cols_keywords_l = [c.lstrip().rstrip() for c in cols_keywords.split(",")]
-        else:
-            cols_keywords_l = []
-    except Exception as e:
-        logger.error(f'Unable to parse setting kb_keywords_fields:{cols_keywords}.')
-        raise f"Stack: {e}"
+    cols_keywords_l = kb_fields_d["tags"]
+    if type(cols_keywords_l) is not list: cols_keywords_l = [cols_keywords_l]
 
     for cs in cols_keywords_l:
         logger.info(f'Preparing \"{cs}\" for search.')

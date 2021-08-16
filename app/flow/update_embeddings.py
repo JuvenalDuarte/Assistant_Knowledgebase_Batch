@@ -18,6 +18,7 @@ class UpdateEmbeddings(Task):
     app_name = luigi.Parameter()
     search_fields = luigi.Parameter()
     keyword_fields = luigi.Parameter()
+    kb_fields = luigi.Parameter()
     refresh_url = luigi.Parameter()
     preproc_mode = luigi.Parameter()
     cache = luigi.BoolParameter()
@@ -31,6 +32,7 @@ class UpdateEmbeddings(Task):
             df=documents_df,
             cols_search=self.search_fields,
             cols_keywords=self.keyword_fields,
+            kb_fields=self.kb_fields,
             app_name=self.app_name,
             url=self.refresh_url,
             model=model,

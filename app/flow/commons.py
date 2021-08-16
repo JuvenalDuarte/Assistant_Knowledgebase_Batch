@@ -38,6 +38,20 @@ _settings = Apps(Carol()).get_settings()
 #       - connector and staging are mandatory
 staging_name = _settings.get('kb_in_staging')
 
+# Defines the role of each of the fields in the kb table. The main ones are "id", 
+# "search", "content" and "filter". The "keyword" role may be omited.
+
+# Usage:
+#       - The input must be provided in json format, i.e.: 
+#      {"id":"column1", 
+#       "search":"column2", 
+#       "content":"column3", 
+#       "filter":"column4", 
+#       "tags":"column5"}.
+#       - If any of the role includes more than one column use list notation: 
+#           [e1, e2, e3 ...]
+kb_fields = _settings.get('kb_fields')
+
 # Specifies which columns from the knowledge base staging will be used 
 # on the searchs.
 # Usage:
@@ -122,6 +136,7 @@ params = dict(
     staging_name = staging_name,
     search_fields = search_fields,
     keyword_fields = keyword_fields,
+    kb_fields = kb_fields,
     preproc_mode = preproc_mode,
 
     app_name=app_name,
