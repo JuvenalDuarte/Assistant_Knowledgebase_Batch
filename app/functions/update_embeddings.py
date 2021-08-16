@@ -47,7 +47,7 @@ def update_embeddings(df, cols_search, cols_keywords, kb_fields, app_name, url, 
     
     kb_fields_d = json.loads(kb_fields)
 
-    if kb_fields_d["id"] in ("", None):
+    if ("id" not in kb_fields_d) or kb_fields_d["id"] in ("", None):
         logger.error('At least one id field must be provided in kb_fields: \"kb_fields\".')
         raise "Setting \"kb_fields\" is badly defined."
 
@@ -59,8 +59,7 @@ def update_embeddings(df, cols_search, cols_keywords, kb_fields, app_name, url, 
     else: 
         df["id"] = df[cols_id]
 
-
-    if kb_fields_d["search"] in ("", None):
+    if ("search" not in kb_fields_d) or kb_fields_d["search"] in ("", None):
         logger.error('At least one search field must be provided in kb_fields: \"kb_fields\".')
         raise "Setting \"kb_fields\" is badly defined."
 
@@ -82,7 +81,7 @@ def update_embeddings(df, cols_search, cols_keywords, kb_fields, app_name, url, 
         # Adding to the list of "searcheable" data 
         dfs.append(dft)
 
-    if kb_fields_d["tags"] in ("", None):
+    if ("tags" not in kb_fields_d) or kb_fields_d["tags"] in ("", None):
         cols_keywords_l = []
     else:
         cols_keywords_l = kb_fields_d["tags"]
