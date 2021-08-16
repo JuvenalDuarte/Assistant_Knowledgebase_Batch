@@ -1,0 +1,41 @@
+{
+  "batch": {
+    "processes": [
+      {
+        "name": "assistantknowledgebasebatch",
+        "algorithmName": "main",
+        "namespace": "",
+        "algorithmTitle": {
+          "pt-br": "Assistant Knowledgebase Batch",
+          "en-US": "Assistant Knowledgebase Batch"
+        },
+        "algorithmDescription": {
+          "pt-br": "Assistant Knowledgebase Batch",
+          "en-US": "Assistant Knowledgebase Batch"
+        },
+        "instanceProperties": {
+          "profile": "",
+          "properties": {
+            "dockerImage": "knowledgebasebatch/assistantknowledgebasebatch:1.0.0",
+            "instanceType": "c1.small"
+          },
+          "environments": {
+            "ENV": "PROD",
+            "LOCALSCHEDULER": "True"
+          }
+        }
+      }
+    ]
+  },
+  "docker": [
+    {
+      "dockerName": "assistantknowledgebasebatch",
+      "dockerTag": "1.0.0",
+      "gitBranch": "main",
+      "gitPath": "/",
+      "instanceType": "c1.small",
+      "gitDockerfileName": "Dockerfile", 
+      "gitRepoUrl": "https://github.com/JuvenalDuarte/Assistant_Knowledgebase_Batch"
+    }
+  ]
+}
