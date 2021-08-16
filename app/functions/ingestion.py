@@ -11,11 +11,11 @@ def fetchFromCarol(conn, stag, org=None, env=None, columns=None, app = None):
 
     login = Carol()
 
-    if not org: org = login.organization
-    if not env: env = login.environment
-    if not app: app = login.app_name
-
-    login.switch_environment(org_name=org, env_name=env, app_name=app)
+    if org or env:
+        if not org: org = login.organization
+        if not env: env = login.environment
+        if not app: app = login.app_name
+        login.switch_environment(org_name=org, env_name=env, app_name=app)
 
     try:
         df = Staging(login).fetch_parquet(staging_name=stag, connector_name=conn, backend='pandas', columns=columns, cds=True)
