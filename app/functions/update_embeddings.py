@@ -147,7 +147,7 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, prep
         stg = Storage(login)
 
         logger.info('Saving embeddings in Carol Storage, on {login.app_name} app.')
-        save_object_to_storage(stg, df, 'kcs4tickets')
+        save_object_to_storage(stg, df, 'knowledgebase_encoded')
 
     if url:
         logger.info('Refreshing online app.')
